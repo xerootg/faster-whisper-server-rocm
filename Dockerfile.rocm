@@ -83,13 +83,13 @@ RUN apt-get update && \
     apt-get install -y ffmpeg curl software-properties-common
 RUN pip install --no-cache-dir poetry==1.8.2
 WORKDIR /root/faster-whisper-server
-COPY pyproject.toml ./
-RUN poetry install --only main
+RUN pip install pydantic==2.7.1 fastapi==0.111.0 uvicorn==0.29.0 python-multipart==0.0.9 soundfile==0.12.1 pydantic-settings==2.2.1 websockets==12.0 numpy==1.24.4 --upgrade-strategy only-if-needed
 COPY ./faster_whisper_server ./faster_whisper_server
-ENTRYPOINT ["poetry", "run"]
+# ENTRYPOINT ["poetry", "run"]
 CMD ["uvicorn", "faster_whisper_server.main:app"]
 ENV WHISPER_MODEL=medium.en
 ENV WHISPER_INFERENCE_DEVICE=cuda
-ENV HSA_OVERRIDE_GFX_VERSION=11.0.0
+ENV WHISPER_COMPUTE_TYPE=float16
+# ENV HSA_OVERRIDE_GFX_VERSION=11.0.0
 ENV UVICORN_HOST=0.0.0.0
 ENV UVICORN_PORT=3456

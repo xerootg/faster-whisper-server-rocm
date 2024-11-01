@@ -90,6 +90,9 @@ def translate_file(
     temperature: Annotated[float, Form()] = 0.0,
     stream: Annotated[bool, Form()] = False,
 ):
+    if model == "whisper-1":
+        model = Model.MEDIUM_EN
+
     start = time.perf_counter()
     whisper = load_model(model)
     segments, transcription_info = whisper.transcribe(
@@ -141,11 +144,14 @@ def transcribe_file(
     response_format: Annotated[ResponseFormat, Form()] = config.default_response_format,
     temperature: Annotated[float, Form()] = 0.0,
     timestamp_granularities: Annotated[
-        list[Literal["segments"] | Literal["words"]],
+        list[Literal["segments"] | Literal["segment"] | Literal["words"]],
         Form(alias="timestamp_granularities[]"),
     ] = ["segments"],
     stream: Annotated[bool, Form()] = False,
 ):
+    if model == "whisper-1":
+        model = Model.MEDIUM_EN
+
     start = time.perf_counter()
     whisper = load_model(model)
     segments, transcription_info = whisper.transcribe(

@@ -33,6 +33,7 @@ class Model(str, Enum):
     LARGE_V1 = "large-v1"
     LARGE_V2 = "large-v2"
     LARGE_V3 = "large-v3"
+    WHISPER1 = "whisper-1"
     # DISTIL_SMALL_EN = "distil-small.en"
     # DISTIL_MEDIUM_EN = "distil-medium.en"
     # DISTIL_LARGE_V2 = "distil-large-v2"
@@ -56,7 +57,7 @@ class Quantization(str, Enum):
     FLOAT16 = "float16"
     BFLOAT16 = "bfloat16"
     FLOAT32 = "float32"
-    DEFAULT = "default"
+    DEFAULT = "float16"
 
 
 class Language(str, Enum):
