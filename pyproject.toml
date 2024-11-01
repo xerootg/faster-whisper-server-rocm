@@ -2,8 +2,8 @@
 package-mode = false
 
 [tool.poetry.dependencies] # implicitly named main
-python = "^3.11"
-faster-whisper = "^1.0.2"
+python = "^3.10"
+faster-whisper = "^0.10.0"
 pydantic = "^2.7.1"
 fastapi = "^0.111.0"
 uvicorn = "^0.29.0"
@@ -11,7 +11,7 @@ python-multipart = "^0.0.9"
 soundfile = "^0.12.1"
 pydantic-settings = "^2.2.1"
 websockets = "^12.0"
-numpy = "^1.26.4"
+numpy = "^1.24.4"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.0"
@@ -21,11 +21,11 @@ youtube-dl = {git = "https://github.com/ytdl-org/youtube-dl.git"}
 openai = "^1.30.3"
 
 [tool.ruff]
-target-version = "py311"
+target-version = "py310"
 
 [tool.pyright]
 # typeCheckingMode = "strict"
-pythonVersion = "3.11"
+pythonVersion = "3.10"
 pythonPlatform = "Linux"
 
 [build-system]

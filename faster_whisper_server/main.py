@@ -237,9 +237,7 @@ async def transcribe_stream(
     ws: WebSocket,
     model: Annotated[Model, Query()] = config.whisper.model,
     language: Annotated[Language | None, Query()] = config.default_language,
-    response_format: Annotated[
-        ResponseFormat, Query()
-    ] = config.default_response_format,
+    response_format: Annotated[ResponseFormat, Query()] = config.default_response_format,
     temperature: Annotated[float, Query()] = 0.0,
 ) -> None:
     await ws.accept()
@@ -252,27 +250,30 @@ async def transcribe_stream(
     whisper = load_model(model)
     asr = FasterWhisperASR(whisper, **transcribe_opts)
     audio_stream = AudioStream()
-    async with asyncio.TaskGroup() as tg:
-        tg.create_task(audio_receiver(ws, audio_stream))
+    
+    async def receive_and_transcribe():
+        await audio_receiver(ws, audio_stream)
+        
+    async def transcribe_and_send():
         async for transcription in audio_transcriber(asr, audio_stream):
             logger.debug(f"Sending transcription: {transcription.text}")
             if ws.client_state == WebSocketState.DISCONNECTED:
                 break
-
             if response_format == ResponseFormat.TEXT:
                 await ws.send_text(transcription.text)
             elif response_format == ResponseFormat.JSON:
                 await ws.send_json(
-                    TranscriptionJsonResponse.from_transcription(
-                        transcription
-                    ).model_dump()
+                    TranscriptionJsonResponse.from_transcription(transcription).model_dump()
                 )
             elif response_format == ResponseFormat.VERBOSE_JSON:
                 await ws.send_json(
-                    TranscriptionVerboseJsonResponse.from_transcription(
-                        transcription
-                    ).model_dump()
+                    TranscriptionVerboseJsonResponse.from_transcription(transcription).model_dump()
                 )
+
+    await asyncio.gather(
+        receive_and_transcribe(),
+        transcribe_and_send()
+    )
 
     if not ws.client_state == WebSocketState.DISCONNECTED:
         logger.info("Closing the connection.")

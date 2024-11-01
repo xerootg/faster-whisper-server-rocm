@@ -1,4 +1,4 @@
-import enum
+from enum import Enum
 
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -11,7 +11,7 @@ BYTES_PER_SECOND = SAMPLES_PER_SECOND * BYTES_PER_SAMPLE
 
 
 # https://platform.openai.com/docs/api-reference/audio/createTranscription#audio-createtranscription-response_format
-class ResponseFormat(enum.StrEnum):
+class ResponseFormat(str, Enum):
     TEXT = "text"
     JSON = "json"
     VERBOSE_JSON = "verbose_json"
@@ -20,7 +20,7 @@ class ResponseFormat(enum.StrEnum):
 
 
 # https://huggingface.co/Systran
-class Model(enum.StrEnum):
+class Model(str, Enum):
     TINY_EN = "tiny.en"
     TINY = "tiny"
     BASE_EN = "base.en"
@@ -33,13 +33,13 @@ class Model(enum.StrEnum):
     LARGE_V1 = "large-v1"
     LARGE_V2 = "large-v2"
     LARGE_V3 = "large-v3"
-    DISTIL_SMALL_EN = "distil-small.en"
-    DISTIL_MEDIUM_EN = "distil-medium.en"
-    DISTIL_LARGE_V2 = "distil-large-v2"
-    DISTIL_LARGE_V3 = "distil-large-v3"
+    # DISTIL_SMALL_EN = "distil-small.en"
+    # DISTIL_MEDIUM_EN = "distil-medium.en"
+    # DISTIL_LARGE_V2 = "distil-large-v2"
+    # DISTIL_LARGE_V3 = "distil-large-v3"
 
 
-class Device(enum.StrEnum):
+class Device(str, Enum):
     CPU = "cpu"
     CUDA = "cuda"
     AUTO = "auto"
@@ -47,7 +47,7 @@ class Device(enum.StrEnum):
 
 # https://github.com/OpenNMT/CTranslate2/blob/master/docs/quantization.md
 # NOTE: `Precision` might be a better name
-class Quantization(enum.StrEnum):
+class Quantization(str, Enum):
     INT8 = "int8"
     INT8_FLOAT16 = "int8_float16"
     INT8_BFLOAT16 = "int8_bfloat16"
@@ -59,7 +59,7 @@ class Quantization(enum.StrEnum):
     DEFAULT = "default"
 
 
-class Language(enum.StrEnum):
+class Language(str, Enum):
     AF = "af"
     AM = "am"
     AR = "ar"
@@ -163,8 +163,8 @@ class Language(enum.StrEnum):
 
 
 class WhisperConfig(BaseModel):
-    model: Model = Field(default=Model.DISTIL_MEDIUM_EN)
-    inference_device: Device = Field(default=Device.AUTO)
+    model: Model = Field(default=Model.MEDIUM_EN)
+    inference_device: Device = Field(default=Device.CUDA)
     compute_type: Quantization = Field(default=Quantization.DEFAULT)
 
 
