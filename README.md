@@ -1,3 +1,6 @@
+# This is a Hack
+I took the build for rocm/CTranslate2 and grafted it into the dockerfile for faster-wisper-server, but significantly downgraded. py3.10 instead of 3.11 and faster-whisper 0.10 instead of 1.0.3. this means fewer models (no distill?) and other compromises. BUT it does work. I am building gfx1100 (I've got a RX 7600), you'll need to set your correct version in the Dockerfile if you need a different target. The only place seems like CTranslate2's cmake setup.
+
 # Faster Whisper Server
 `faster-whisper-server` is an OpenAI API compatible transcription server which uses [faster-whisper](https://github.com/SYSTRAN/faster-whisper) as it's backend.
 Features:
